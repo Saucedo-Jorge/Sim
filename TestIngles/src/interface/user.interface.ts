@@ -5,6 +5,7 @@ export interface User extends IAuth {
     nombre: string;
     apellidop: string;
     apellidom: string;
+    rol: 'A' | 'U'; // A: Admin, U: Usuario
     nivel_actual: 'basico' | 'intermedio' | 'avanzado';
     intentos_examen_prueba: number;
     intentos_examen_final: number;

@@ -9,6 +9,7 @@ class UserModel extends Model<User> implements User {
   apellidom!: string;
   correo!: string;
   contrasena!: string;  
+    rol!: 'A' | 'U'; // A: Admin, U: Usuario
   nivel_actual!: 'basico' | 'intermedio' | 'avanzado';
   intentos_examen_final!: number;
   createdAt!: Date;
@@ -50,6 +51,12 @@ class UserModel extends Model<User> implements User {
     
     contrasena: {
       type: DataTypes.STRING,
+      allowNull: false,
+    },
+
+    rol: {
+      type: DataTypes.ENUM('A', 'U'), // A: Admin, U: Usuario
+      defaultValue: 'U',
       allowNull: false,
     },
 

@@ -6,7 +6,19 @@ const registerCtrl = async ({body}: Request, res: Response) => {
     res.send(responseUser);
 };
 
-const loginCtrl = async (req: Request, res: Response) => {};
+const loginCtrl = async ({body}: Request, res: Response) => {
+    const {correo, contrasena} = body;
+    const responseUser = await loginUser({correo, contrasena});
+    
+    if (responseUser === "Contraseña incorrecta") {
+        res.status(401).send({error: responseUser});
+    }
+    if (responseUser === "Usuario no encontrado") {
+        res.status(404).send({error: responseUser});
+    }
+
+    res.send(responseUser);
+ };
 
 export { registerCtrl, loginCtrl };
 
