@@ -18,6 +18,8 @@ const registerNewUser = async (authUser: User) => {
 
     // Hash the password
     const passHash = await encrypt(authUser.contrasena);
+
+    
     const newUser = await UserModel.create({
         ...authUser,
         contrasena: passHash
