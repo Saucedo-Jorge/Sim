@@ -1,9 +1,10 @@
 import { Request, Response, NextFunction } from "express";
 import { verified } from "../utils/bcrypt.handle";
 import { verifyToken } from "../utils/jwt.handle";
+import { RequestExt } from "../interface/requestExt.interface";
 
 
-const checkJWT = (req: Request, res: Response, next:NextFunction) => {
+const checkJWT = (req: RequestExt, res: Response, next:NextFunction) => {
     try {
         const jwtByUser = req.headers.authorization ||null;
         const jwt = jwtByUser?.split(" ").pop() || null;
@@ -13,7 +14,10 @@ const checkJWT = (req: Request, res: Response, next:NextFunction) => {
             res.status(401).send({ error: "Invalid token" });
         }
         else {
-            
+
+
+            req.user = isOk; // Attach the user information to the request object
+
             console.log("JWT by user:", jwtByUser);
             next();
         }

@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import { handleHttp } from "../utils/error.handle";
+import { RequestExt } from "../interface/requestExt.interface";
 
 const getItem = (req: Request, res: Response) => {
     try {
@@ -13,7 +14,7 @@ const getItem = (req: Request, res: Response) => {
 
 };
 
-const getItems = (req: Request, res: Response) => {
+const getItems = (req: RequestExt, res: Response) => {
     try {
         // Simulate fetching items
         const items = [
@@ -21,7 +22,7 @@ const getItems = (req: Request, res: Response) => {
             { id: 2, name: "Item 2" },
             { id: 3, name: "Item 3" }
         ];
-        res.send(items);
+        res.send({data: items, user : req.user});
 
     }
     catch (e){
