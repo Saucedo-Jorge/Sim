@@ -23,7 +23,7 @@ const getItems = async (req: RequestExt, res: Response) => {
             { id: 2, name: "Item 2" },
             { id: 3, name: "Item 3" }
         ];
-        res.send( req.user);
+        res.send('DATA EXTEND REQUEST'+ req.user);
         //res.send(items);
 
 

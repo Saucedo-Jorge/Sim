@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="es">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Panel Principal</title>
+        <script>
+    // Función para obtener cookies
+    function getCookie(name) {
+      const value = `; ${document.cookie}`;
+      const parts = value.split(`; ${name}=`);
+      if (parts.length === 2) return parts.pop().split(';').shift();
+    }
+
+    // Verifica si hay un token
+    window.onload = () => {
+      const token = getCookie("token");
+      if (!token) {
+        window.location.href = "../html/login.html"; // redirecciona si no hay token
+      }
+
+      // Simulamos los intentos restantes desde localStorage (o podrías traerlos de una API)
+      document.getElementById("general-attempts").textContent =
+        localStorage.getItem("generalAttempts") ?? "3";
+      document.getElementById("final-attempts").textContent =
+        localStorage.getItem("finalAttempts") ?? "1";
+    };
+  </script>
+
+        <!-- Estilos rápidos con Tailwind CDN -->
+        <script src="https://cdn.tailwindcss.com"></script>
+    </head>
+    <body class="bg-gray-100 text-gray-800 font-sans">
+        <div class="max-w-4xl mx-auto p-6">
+            <h1 class="text-3xl font-bold mb-6">Panel Principal</h1>
+
+            <!-- Dashboards -->
+            <section class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-10">
+                <div class="bg-white p-4 rounded shadow">
+                    <h2 class="text-xl font-semibold mb-2">Preguntas más
+                        falladas</h2>
+                    <p>Ejemplo: Señales de tránsito, Alcoholímetro, Cruces
+                        ferroviarios...</p>
+                </div>
+                <div class="bg-white p-4 rounded shadow">
+                    <h2 class="text-xl font-semibold mb-2">Promedio de
+                        aciertos</h2>
+                    <p>Últimos 6 exámenes: 7.5/10</p>
+                </div>
+            </section>
+
+            <!-- Opciones de examen -->
+            <section class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div
+                    class="bg-white p-6 rounded shadow flex flex-col items-center">
+                    <h2 class="text-2xl font-semibold mb-2">Examen General</h2>
+                    <p class="mb-4">Intentos restantes: <span
+                            id="general-attempts"
+                            class="font-bold text-blue-600"></span></p>
+                    <button
+                        class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Iniciar</button>
+                </div>
+
+                <div
+                    class="bg-white p-6 rounded shadow flex flex-col items-center">
+                    <h2 class="text-2xl font-semibold mb-2">Examen Final</h2>
+                    <p class="mb-4">Intentos restantes: <span
+                            id="final-attempts"
+                            class="font-bold text-red-600"></span></p>
+                    <button
+                        class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600">Iniciar</button>
+                </div>
+            </section>
+        </div>
+    </body>
+</html>

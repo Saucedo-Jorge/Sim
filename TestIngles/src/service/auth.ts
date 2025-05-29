@@ -3,6 +3,7 @@ import { User } from "../interface/user.interface";
 import { UserModel } from "../model/user";
 import { encrypt, verified } from "../utils/bcrypt.handle";
 import { generateToken } from "../utils/jwt.handle";
+import { Response } from "express";
 
 const registerNewUser = async (authUser: User) => {
     const checkUser = await UserModel.findOne({
@@ -18,8 +19,6 @@ const registerNewUser = async (authUser: User) => {
 
     // Hash the password
     const passHash = await encrypt(authUser.contrasena);
-
-    
     const newUser = await UserModel.create({
         ...authUser,
         contrasena: passHash
@@ -29,7 +28,7 @@ const registerNewUser = async (authUser: User) => {
 
 }
 
-const loginUser = async ({correo, contrasena}: IAuth) => {
+const loginUser = async ({correo, contrasena}: IAuth, res : Response) => {
     const checkUser = await UserModel.findOne({
         where: {
             correo:  correo
@@ -46,8 +45,12 @@ const loginUser = async ({correo, contrasena}: IAuth) => {
         return('Contraseña incorrecta');
     }
 
-const token = generateToken(String(checkUser.id_usuario), checkUser.nombre,checkUser.rol);
-    return token;
+const token = generateToken(String(checkUser.id_usuario), checkUser.nombre,checkUser.rol, res);
+    if (!token) {
+        throw new Error('Error al generar el token');
+    }
+    return {   token}
 };
 
 export { registerNewUser, loginUser };
+

@@ -1,0 +1,92 @@
+/* Reset básico */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Estilo del body para ocupar toda la ventana */
+body {
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 1rem;
+}
+
+/* Contenedor del formulario */
+.formulario {
+  background-color: #fff;
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+  width: 100%;
+  max-width: 400px;
+}
+
+/* Título */
+.formulario h2 {
+  margin-bottom: 1.5rem;
+  font-size: 1.8rem;
+  color: #333;
+  text-align: center;
+}
+
+/* Campos del formulario */
+.formulario input {
+  width: 100%;
+  padding: 0.75rem;
+  margin-bottom: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 1rem;
+  transition: border-color 0.3s ease;
+}
+
+.formulario input:focus {
+  border-color: #667eea;
+  outline: none;
+}
+
+/* Botón */
+.formulario button {
+  width: 100%;
+  padding: 0.75rem;
+  background-color: #667eea;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.formulario button:hover {
+  background-color: #5a67d8;
+}
+
+/* Mensaje de resultado */
+#mensaje {
+  margin-top: 1rem;
+  text-align: center;
+  font-size: 0.9rem;
+  color: #e53e3e;
+}
+
+/* Responsive para pantallas pequeñas */
+@media (max-width: 480px) {
+  .formulario {
+    padding: 1.5rem;
+  }
+
+  .formulario h2 {
+    font-size: 1.5rem;
+  }
+
+  .formulario input,
+  .formulario button {
+    font-size: 0.95rem;
+  }
+}

@@ -6,7 +6,7 @@ import { RequestExt } from "../interface/requestExt.interface";
 
 const checkJWT = (req: RequestExt, res: Response, next:NextFunction) => {
     try {
-        const jwtByUser = req.headers.authorization ||null;
+        const jwtByUser = req.cookies.token;
         const jwt = jwtByUser?.split(" ").pop() || null;
         const isOk = verifyToken(`${jwt}` );
         console.log("JWT by user:", isOk);

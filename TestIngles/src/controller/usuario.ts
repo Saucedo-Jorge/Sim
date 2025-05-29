@@ -1,32 +1,30 @@
 import { Request, Response } from "express";
 import { handleHttp } from "../utils/error.handle";
 import { RequestExt } from "../interface/requestExt.interface";
+import { getusuario, getusuarios } from "../service/usuario";
 
-const getItem = (req: Request, res: Response) => {
+const getItem = async ({params}: Request, res: Response) => {
     try {
-
-    }
+        const { id } = params;
+        const response = await getusuario(parseInt(id,10));
+        res.send(response);
+        }
     catch (e){
 
-        handleHttp(res, "ERROR_GET_ITEM");
+        handleHttp(res, "ERROR_GET_USUARIO");
 
     }
 
 };
 
-const getItems = (req: RequestExt, res: Response) => {
+const getItems = async (req: Request, res: Response) => {
     try {
-        // Simulate fetching items
-        const items = [
-            { id: 1, name: "Item 1" },
-            { id: 2, name: "Item 2" },
-            { id: 3, name: "Item 3" }
-        ];
-        res.send({data: items, user : req.user});
+        const response = await getusuarios();
+        res.send(response);
 
     }
     catch (e){
-        handleHttp(res, "ERROR_GET_ITEMS");
+        handleHttp(res, "ERROR_GET_USUARIOS",e);
 
     }
 

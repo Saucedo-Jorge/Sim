@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="es">
+    <head>
+        <meta charset="UTF-8">
+        <title>Registro</title>
+    </head>
+    <body>
+        <h1>Registro de Usuario</h1>
+        <form id="registerForm">
+            <input type="text" name="nombre" placeholder="Nombre" required><br>
+            <input type="email" name="correo" placeholder="Correo" required><br>
+            <input type="password" name="contrasena" placeholder="Contraseña"
+                required><br>
+            <input type="text" name="rol" placeholder="Rol (admin/usuario)"
+                required><br>
+            <button type="submit">Registrarse</button>
+        </form>
+        <script>
+    document.getElementById("registerForm").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const data = new FormData(e.target);
+      const body = Object.fromEntries(data);
+      const res = await fetch("http://localhost:3000/auth/register", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(body)
+      });
+      const result = await res.json();
+      if (res.ok) {
+        alert("Registro exitoso");
+        window.location.href = "login.html";
+      } else {
+        alert("Error al registrar: " + result.message || result.error);
+      }
+    });
+  </script>
+    </body>
+</html>

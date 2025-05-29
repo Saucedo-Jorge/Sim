@@ -7,8 +7,9 @@ const registerCtrl = async ({body}: Request, res: Response) => {
 };
 
 const loginCtrl = async ({body}: Request, res: Response) => {
+    
     const {correo, contrasena} = body;
-    const responseUser = await loginUser({correo, contrasena});
+    const responseUser = await loginUser({correo, contrasena}, res);
     
     if (responseUser === "Contraseña incorrecta") {
         res.status(401).send({error: responseUser});
@@ -17,9 +18,9 @@ const loginCtrl = async ({body}: Request, res: Response) => {
         res.status(404).send({error: responseUser});
     }
 
+    
     res.send(responseUser);
  };
 
 export { registerCtrl, loginCtrl };
-
 

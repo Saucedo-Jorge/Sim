@@ -1,0 +1,56 @@
+/* Reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Estilo general */
+body {
+  font-family: "Segoe UI", sans-serif;
+  background: linear-gradient(to right, #4facfe, #00f2fe);
+  color: #fff;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.hero {
+  text-align: center;
+  padding: 2rem;
+  background-color: rgba(0, 0, 0, 0.4);
+  border-radius: 1rem;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+}
+
+.titulo {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+}
+
+.descripcion {
+  font-size: 1.2rem;
+  margin-bottom: 2rem;
+}
+
+.botones button {
+  margin: 0 1rem;
+  padding: 0.8rem 1.5rem;
+  font-size: 1rem;
+  border: none;
+  border-radius: 0.5rem;
+  background-color: #ffffff;
+  color: #007acc;
+  cursor: pointer;
+  transition: transform 0.2s, background-color 0.2s;
+}
+
+.botones button:hover {
+  transform: scale(1.05);
+  background-color: #e0f2ff;
+}
+/* Puedes añadir este bloque al final de tu CSS actual si quieres personalizar el formulario de login */
+body.login {
+  background: linear-gradient(135deg, #43cea2, #185a9d); /* verde-azul */
+}
