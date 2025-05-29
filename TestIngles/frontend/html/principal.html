@@ -16,7 +16,9 @@
     window.onload = () => {
       const token = getCookie("token");
       if (!token) {
+        alert("No tienes permiso para acceder a esta página. Por favor, inicia sesión.");
         window.location.href = "../html/login.html"; // redirecciona si no hay token
+        
       }
 
       // Simulamos los intentos restantes desde localStorage (o podrías traerlos de una API)
