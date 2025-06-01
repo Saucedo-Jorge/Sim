@@ -16,13 +16,14 @@ const generateToken = async (
 
 
   res.cookie('token', token, {
-    httpOnly: true,
+    httpOnly: false,
     secure: false, // true si usas HTTPS
-    sameSite: 'lax',
     maxAge: 2 * 60 * 60 * 1000, // 2 horas
   });
 
-    res.json({ mensaje: 'Login exitoso' });
+    //res.json({ mensaje: 'Login exitoso' });
+    return res.json({ token });
+
 };
 const verifyToken = (token: string): any => {
     const isOk = verify(token, JWT_SECRET!);
