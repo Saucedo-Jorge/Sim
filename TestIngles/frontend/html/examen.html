@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="es">
+    <head>
+        <meta charset="UTF-8">
+        <title>Preguntas del examen</title>
+        <style>
+      body {
+        font-family: Arial, sans-serif;
+        padding: 20px;
+      }
+      .pregunta {
+        margin-bottom: 20px;
+        padding: 15px;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+      }
+      .opcion {
+        display: block;
+        margin: 5px 0;
+      }
+    </style>
+    </head>
+    <body>
+        <h1>Examen teórico</h1>
+        <div id="contenedor-preguntas"></div>
+
+        <script>
+      async function cargarPreguntas() {
+        try {
+          const respuesta = await fetch('http://localhost:3001/pregunta/prueba');
+          
+          if (!respuesta.ok) {
+            throw new Error('Error en la solicitud: ' + respuesta.status);
+          }
+
+          const preguntas = await respuesta.json();
+
+          const contenedor = document.getElementById('contenedor-preguntas');
+          contenedor.innerHTML = ''; // Limpia contenido anterior si lo hubiera
+
+          preguntas.forEach((pregunta, index) => {
+            const div = document.createElement('div');
+            div.className = 'pregunta';
+
+            const enunciado = document.createElement('p');
+            enunciado.textContent = `${index + 1}. ${pregunta.enunciado}`;
+            div.appendChild(enunciado);
+
+            // Mostrar opciones disponibles
+            ['a', 'b', 'c', 'd'].forEach(opcion => {
+              if (pregunta[`opcion_${opcion}`]) {
+                const label = document.createElement('label');
+                label.className = 'opcion';
+
+                const input = document.createElement('input');
+                input.type = 'radio';
+                input.name = `pregunta_${pregunta.id_pregunta}`;
+                input.value = opcion;
+
+                label.appendChild(input);
+                label.appendChild(document.createTextNode(' ' + pregunta[`opcion_${opcion}`]));
+
+                div.appendChild(label);
+              }
+            });
+
+            contenedor.appendChild(div);
+          });
+        } catch (error) {
+          console.error('Error cargando preguntas:', error);
+          alert('Error cargando preguntas del servidor');
+        }
+      }
+
+      cargarPreguntas();
+    </script>
+    </body>
+</html>
