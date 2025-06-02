@@ -1,38 +1,108 @@
 <!DOCTYPE html>
 <html lang="es">
-    <head>
-        <meta charset="UTF-8">
-        <title>Registro</title>
-    </head>
-    <body>
-        <h1>Registro de Usuario</h1>
-        <form id="registerForm">
-            <input type="text" name="nombre" placeholder="Nombre" required><br>
-            <input type="email" name="correo" placeholder="Correo" required><br>
-            <input type="password" name="contrasena" placeholder="Contraseña"
-                required><br>
-            <input type="text" name="rol" placeholder="Rol (admin/usuario)"
-                required><br>
-            <button type="submit">Registrarse</button>
-        </form>
-        <script>
-    document.getElementById("registerForm").addEventListener("submit", async (e) => {
-      e.preventDefault();
-      const data = new FormData(e.target);
-      const body = Object.fromEntries(data);
-      const res = await fetch("http://localhost:3000/auth/register", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(body)
-      });
-      const result = await res.json();
-      if (res.ok) {
-        alert("Registro exitoso");
-        window.location.href = "login.html";
-      } else {
-        alert("Error al registrar: " + result.message || result.error);
+  <head>
+    <meta charset="UTF-8">
+    <title>Registro</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #f4f4f9;
       }
-    });
-  </script>
-    </body>
+
+      h1 {
+        text-align: center;
+        margin-top: 30px;
+        color: #333;
+      }
+
+      .container {
+        width: 300px;
+        margin: 0 auto;
+        background-color: white;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      }
+
+      input {
+        width: 100%;
+        padding: 10px;
+        margin: 10px 0;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        font-size: 16px;
+      }
+
+      button {
+        width: 100%;
+        padding: 10px;
+        background-color: #4CAF50;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        font-size: 16px;
+        cursor: pointer;
+      }
+
+      button:hover {
+        background-color: #45a049;
+      }
+
+      .form-group {
+        margin-bottom: 15px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Registro de Usuario</h1>
+    <div class="container">
+      <form id="registerForm">
+        <div class="form-group">
+          <input type="text" name="nombre" placeholder="Nombre" required>
+        </div>
+        <div class="form-group">
+          <input type="text" name="apellidop" placeholder="Apellido Paterno"
+            required>
+        </div>
+        <div class="form-group">
+          <input type="text" name="apellidom" placeholder="Apellido Materno"
+            required>
+        </div>
+        <div class="form-group">
+          <input type="email" name="correo" placeholder="Correo" required>
+        </div>
+        <div class="form-group">
+          <input type="password" name="contrasena" placeholder="Contraseña"
+            required>
+        </div>
+        <div class="form-group">
+          <input type="text" name="rol" placeholder="Rol (admin/usuario)"
+            required>
+        </div>
+        <button type="submit">Registrarse</button>
+      </form>
+    </div>
+
+    <script>
+      document.getElementById("registerForm").addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const data = new FormData(e.target);
+        const body = Object.fromEntries(data);
+        const res = await fetch("http://localhost:3001/auth/register", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(body)
+        });
+        const result = await res.json();
+        if (res.ok) {
+          alert("Registro exitoso");
+          window.location.href = "login.html";
+        } else {
+          alert("Error al registrar: " + result.message || result.error);
+        }
+      });
+    </script>
+  </body>
 </html>

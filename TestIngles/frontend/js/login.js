@@ -11,10 +11,12 @@ loginForm.addEventListener("submit", async (e) => {
 
   console.log("Datos del formulario de login:", data);
   try {
-    const res = await fetch("http://localhost:3001/auth/login", {
+    const res = await fetch("localhost:3001/auth/login", {
       method: "POST",
+      credentials: "include",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(data),
+      // Asegura que las cookies se envíen con la solicitud
     });
 
     if (res.ok) {

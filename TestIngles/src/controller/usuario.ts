@@ -1,7 +1,8 @@
 import { Request, Response } from "express";
 import { handleHttp } from "../utils/error.handle";
 import { RequestExt } from "../interface/requestExt.interface";
-import { getusuario, getusuarios } from "../service/usuario";
+import { getusuario, getusuarios, insertUsuario } from "../service/usuario";
+import { userInfo } from "os";
 
 const getItem = async ({params}: Request, res: Response) => {
     try {
@@ -25,6 +26,21 @@ const getItems = async (req: Request, res: Response) => {
     }
     catch (e){
         handleHttp(res, "ERROR_GET_USUARIOS",e);
+
+    }
+
+};
+
+const getInfo = async (req: RequestExt, res: Response) => {
+    try {
+      
+        console.log("Info del usuario");
+        console.log("USER", req.user);
+        res.send({data : req.user});
+
+    }
+    catch (e){
+        handleHttp(res, "ERROR_GET_INFO",e);
 
     }
 
@@ -65,4 +81,4 @@ const deleteItem = (req: Request, res: Response) => {
 
 };
 
-export { getItem, getItems, postItem, updateItem, deleteItem };
+export { getItem, getItems, postItem, updateItem, deleteItem, getInfo };

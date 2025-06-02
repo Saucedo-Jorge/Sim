@@ -5,36 +5,47 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>Panel Principal</title>
         <script>
-    // Función para obtener cookies
-    function getCookie(name) {
-      const value = `; ${document.cookie}`;
-      const parts = value.split(`; ${name}=`);
-      if (parts.length === 2) return parts.pop().split(';').shift();
-    }
+            // Función para verificar si el usuario está autenticado
+            async function checkAuth() {
+                try {
+                    const response = await fetch('localhost:3001/usuario/info', { // Ajusta la URL de la API
+                        method: 'GET',
+                        credentials: 'include', // Asegura que se envíen las cookies
+                    });
 
-    // Verifica si hay un token
-    window.onload = () => {
-      const token = getCookie("token");
-      if (!token) {
-        alert("No tienes permiso para acceder a esta página. Por favor, inicia sesión.");
-        window.location.href = "../html/login.html"; // redirecciona si no hay token
-        
-      }
+                    if (!response.ok) {
+                        // Si el token no es válido o no se proporciona, redirige al login
+                        alert('Error al verificar la autenticación. Por favor, inicia sesión nuevamente.');
+                        window.location.href = '../html/login.html';
+                    } else {
+                        const data = await response.json();
+                        const userName = data.user.nombre;
 
-      // Simulamos los intentos restantes desde localStorage (o podrías traerlos de una API)
-      document.getElementById("general-attempts").textContent =
-        localStorage.getItem("generalAttempts") ?? "3";
-      document.getElementById("final-attempts").textContent =
-        localStorage.getItem("finalAttempts") ?? "1";
-    };
-  </script>
+                        // Mostrar el mensaje de bienvenida con el nombre del usuario
+                        const bienvenidaElement = document.getElementById('bienvenida');
+                        bienvenidaElement.textContent = `¡Bienvenido, ${userName}!`;
+                    }
+                } catch (error) {
+                    console.error('Error al verificar la autenticación:', error);
+                    alert('Error al verificar la autenticación. Por favor, inicia sesión nuevamente.');
+                    window.location.href = '../html/login.html'; // En caso de cualquier error, redirige al login
+                }
+            }
+
+            window.onload = function() {
+                checkAuth(); // Llama a la función de autenticación al cargar la página
+            };
+        </script>
 
         <!-- Estilos rápidos con Tailwind CDN -->
         <script src="https://cdn.tailwindcss.com"></script>
     </head>
     <body class="bg-gray-100 text-gray-800 font-sans">
         <div class="max-w-4xl mx-auto p-6">
+
             <h1 class="text-3xl font-bold mb-6">Panel Principal</h1>
+            <p id="bienvenida"
+                class="text-lg mb-4 text-gray-700">¡Bienvenido</p>
 
             <!-- Dashboards -->
             <section class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-10">

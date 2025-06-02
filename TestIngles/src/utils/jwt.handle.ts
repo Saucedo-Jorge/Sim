@@ -15,14 +15,14 @@ const generateToken = async (
 
 
 
+  console.log("Token generado:", token);
   res.cookie('token', token, {
     httpOnly: false,
     secure: false, // true si usas HTTPS
     maxAge: 2 * 60 * 60 * 1000, // 2 horas
   });
 
-    //res.json({ mensaje: 'Login exitoso' });
-    return res.json({ token });
+    
 
 };
 const verifyToken = (token: string): any => {

@@ -22,5 +22,12 @@ const loginCtrl = async ({body}: Request, res: Response) => {
     res.send(responseUser);
  };
 
-export { registerCtrl, loginCtrl };
+ const logoutCtrl = async (req: Request, res: Response) => {
+    res.clearCookie('token'); // Clear the cookie
+    res.status(200).send({message: "Logged out successfully"}); // Send a response 
+}
+// to the client    
+
+
+export { registerCtrl, loginCtrl, logoutCtrl };
 
