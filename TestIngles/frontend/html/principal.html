@@ -8,7 +8,7 @@
             // Función para verificar si el usuario está autenticado
             async function checkAuth() {
                 try {
-                    const response = await fetch('localhost:3001/usuario/info', { // Ajusta la URL de la API
+                    const response = await fetch('http://localhost:3001/usuario/info', { // Ajusta la URL de la API
                         method: 'GET',
                         credentials: 'include', // Asegura que se envíen las cookies
                     });

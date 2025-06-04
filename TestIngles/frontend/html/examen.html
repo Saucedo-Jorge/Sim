@@ -1,78 +1,188 @@
 <!DOCTYPE html>
 <html lang="es">
-    <head>
-        <meta charset="UTF-8">
-        <title>Preguntas del examen</title>
-        <style>
-      body {
-        font-family: Arial, sans-serif;
-        padding: 20px;
+  <head>
+    <meta charset="UTF-8">
+    <title>Examen teórico</title>
+    <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      background-color: #f4f4f4;
+    }
+    .pregunta {
+      max-width: 600px;
+      width: 100%;
+      background: white;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      text-align: left;
+    }
+    .opcion {
+      display: block;
+      margin: 10px 0;
+    }
+    #cronometro {
+      font-size: 24px;
+      color: red;
+      margin-bottom: 15px;
+    }
+    #resultado {
+      margin-top: 20px;
+      font-weight: bold;
+    }
+  </style>
+  </head>
+  <body>
+    <div id="cronometro">Tiempo: 60</div>
+    <div id="contenedor-pregunta" class="pregunta"></div>
+    <div id="resultado"></div>
+
+    <script>
+  let preguntas = [];
+  let indice = 0;
+  let timer;
+  let tiempoRestante = 60;
+  const respuestasUsuario = [];
+  let idExamen = null;
+  const idUsuario = 1; // <-- Cambia según tu lógica de sesión
+  const tipoExamen = 'prueba';
+
+  async function iniciarExamen() {
+    try {
+      // Crear el examen
+      const res = await fetch('http://localhost:3001/examen/', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id_usuario: idUsuario, tipo_examen: tipoExamen })
+      });
+      const data = await res.json();
+      idExamen = data.id_examen;
+
+      await cargarPreguntas();
+    } catch (error) {
+      alert('Error al iniciar examen');
+      console.error(error);
+    }
+  }
+
+  async function cargarPreguntas() {
+    try {
+      const respuesta = await fetch('http://localhost:3001/pregunta/prueba');
+      if (!respuesta.ok) throw new Error('Error en la solicitud: ' + respuesta.status);
+      preguntas = await respuesta.json();
+      mostrarPregunta();
+    } catch (error) {
+      alert('Error cargando preguntas del servidor');
+      console.error(error);
+    }
+  }
+
+  function mostrarPregunta() {
+    if (indice >= preguntas.length) {
+      finalizarExamen();
+      return;
+    }
+
+    const pregunta = preguntas[indice];
+    const contenedor = document.getElementById('contenedor-pregunta');
+    contenedor.innerHTML = '';
+
+    const enunciado = document.createElement('p');
+    enunciado.textContent = `${indice + 1}. ${pregunta.enunciado}`;
+    contenedor.appendChild(enunciado);
+
+    ['a', 'b', 'c', 'd'].forEach(opcion => {
+      if (pregunta[`opcion_${opcion}`]) {
+        const label = document.createElement('label');
+        label.className = 'opcion';
+
+        const input = document.createElement('input');
+        input.type = 'radio';
+        input.name = 'respuesta';
+        input.value = opcion;
+
+        input.addEventListener('change', () => {
+          clearInterval(timer);
+          guardarRespuesta(pregunta, input.value);
+          indice++;
+          mostrarPregunta();
+        });
+
+        label.appendChild(input);
+        label.appendChild(document.createTextNode(' ' + pregunta[`opcion_${opcion}`]));
+        contenedor.appendChild(label);
       }
-      .pregunta {
-        margin-bottom: 20px;
-        padding: 15px;
-        border: 1px solid #ccc;
-        border-radius: 8px;
+    });
+
+    tiempoRestante = 60;
+    actualizarCronometro();
+    iniciarTemporizador(pregunta);
+  }
+
+  function iniciarTemporizador(pregunta) {
+    clearInterval(timer);
+    timer = setInterval(() => {
+      tiempoRestante--;
+      actualizarCronometro();
+      if (tiempoRestante <= 0) {
+        clearInterval(timer);
+        guardarRespuesta(pregunta, null); // No respondió
+        indice++;
+        mostrarPregunta();
       }
-      .opcion {
-        display: block;
-        margin: 5px 0;
-      }
-    </style>
-    </head>
-    <body>
-        <h1>Examen teórico</h1>
-        <div id="contenedor-preguntas"></div>
+    }, 1000);
+  }
 
-        <script>
-      async function cargarPreguntas() {
-        try {
-          const respuesta = await fetch('http://localhost:3001/pregunta/prueba');
-          
-          if (!respuesta.ok) {
-            throw new Error('Error en la solicitud: ' + respuesta.status);
-          }
+  function actualizarCronometro() {
+    document.getElementById('cronometro').textContent = `Tiempo: ${tiempoRestante}`;
+  }
 
-          const preguntas = await respuesta.json();
+  function guardarRespuesta(pregunta, seleccion) {
+    const correcta = seleccion === pregunta.respuesta;
+    respuestasUsuario.push({
+      id_pregunta: pregunta.id_pregunta,
+      respuesta_usuario: seleccion,
+      es_correcta: correcta
+    });
+  }
 
-          const contenedor = document.getElementById('contenedor-preguntas');
-          contenedor.innerHTML = ''; // Limpia contenido anterior si lo hubiera
+  async function finalizarExamen() {
+    const correctas = respuestasUsuario.filter(r => r.es_correcta).length;
+    const total = respuestasUsuario.length;
+    const calificacion = Math.round((correctas / total) * 100);
 
-          preguntas.forEach((pregunta, index) => {
-            const div = document.createElement('div');
-            div.className = 'pregunta';
+    // Actualizar examen con calificación
+    await fetch(`http://localhost:3001/examenes/${idExamen}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ calificacion })
+    });
 
-            const enunciado = document.createElement('p');
-            enunciado.textContent = `${index + 1}. ${pregunta.enunciado}`;
-            div.appendChild(enunciado);
+    // Insertar respuestas
+    await fetch('http://localhost:3001/respuestas', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        id_examen: idExamen,
+        respuestas: respuestasUsuario
+      })
+    });
 
-            // Mostrar opciones disponibles
-            ['a', 'b', 'c', 'd'].forEach(opcion => {
-              if (pregunta[`opcion_${opcion}`]) {
-                const label = document.createElement('label');
-                label.className = 'opcion';
+    document.getElementById('contenedor-pregunta').innerHTML = `<h2>Examen finalizado</h2>`;
+    document.getElementById('cronometro').style.display = 'none';
+    document.getElementById('resultado').textContent = `Calificación: ${calificacion}`;
+  }
 
-                const input = document.createElement('input');
-                input.type = 'radio';
-                input.name = `pregunta_${pregunta.id_pregunta}`;
-                input.value = opcion;
+  // Inicia todo
+  iniciarExamen();
+</script>
 
-                label.appendChild(input);
-                label.appendChild(document.createTextNode(' ' + pregunta[`opcion_${opcion}`]));
-
-                div.appendChild(label);
-              }
-            });
-
-            contenedor.appendChild(div);
-          });
-        } catch (error) {
-          console.error('Error cargando preguntas:', error);
-          alert('Error cargando preguntas del servidor');
-        }
-      }
-
-      cargarPreguntas();
-    </script>
-    </body>
+  </body>
 </html>

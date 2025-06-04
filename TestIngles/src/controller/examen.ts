@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import { handleHttp } from "../utils/error.handle";
 import { RequestExt } from "../interface/requestExt.interface";
-import { deleteexamen, getexamen, getexamenes, getexamenesf, getexamenesp, insertExamen, updateexamen } from "../service/examen";
+import { deleteexamen, getexamen, getexamenes, insertExamen, updateexamen } from "../service/examen";
 
 const getItem = async ({params}: Request, res: Response) => {
     try {
@@ -36,35 +36,6 @@ const getItems = async (req: Request, res: Response) => {
 
 };
 
-const getItemsp = async (req: RequestExt, res: Response) => {
-    try {
-
-        const responseUser = await getexamenesp()
-    res.send(responseUser);
-        
-
-    }
-    catch (e){
-        handleHttp(res, "ERROR_GET_ITEMS");
-
-    }
-
-};
-
-const getItemsf = async (req: RequestExt, res: Response) => {
-    try {
-
-        const responseUser = await getexamenesf()
-        res.send(responseUser);
-        
-
-    }
-    catch (e){
-        handleHttp(res, "ERROR_GET_ITEMS");
-
-    }
-
-};
 
 const postItem = async({body}: Request, res: Response) => {
     try {
@@ -112,4 +83,4 @@ const deleteItem = ({body}: Request, res: Response) => {
 
 };
 
-export { getItem, getItems, postItem, updateItem, deleteItem, getItemsp, getItemsf, };
+export { getItem, getItems, postItem, updateItem, deleteItem,  };

@@ -10,16 +10,15 @@ const generateToken = async (
 ) => {
   const token = sign(
     { id_usuario, nombre, rol }, JWT_SECRET!, {
-    expiresIn: '2h',
+    expiresIn: '5h',
   });
 
 
 
   console.log("Token generado:", token);
-  res.cookie('token', token, {
-    httpOnly: false,
-    secure: false, // true si usas HTTPS
-    maxAge: 2 * 60 * 60 * 1000, // 2 horas
+  res.status(200).json({
+    success: true,
+    token,
   });
 
     

@@ -1,15 +1,11 @@
 import { Request, Response, Router } from "express";
-import { deleteItem, getItem, getItems, getItemsf, getItemsp, postItem, updateItem } from "../controller/examen";
+import { deleteItem, getItem, getItems,  postItem, updateItem } from "../controller/examen";
 import { checkJWT } from "../middleware/session";
 
 
 const router = Router();    
 
 router.get("/",checkJWT, getItems); 
-
-router.get("/prueba", getItemsp); 
-
-router.get("/final",checkJWT, getItemsf); 
 
 router.get("/:id",checkJWT,  getItem);
 
