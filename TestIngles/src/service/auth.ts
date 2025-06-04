@@ -45,7 +45,7 @@ const loginUser = async ({correo, contrasena}: IAuth, res : Response) => {
         return('Contraseña incorrecta');
     }
 
-const token = generateToken(String(checkUser.id_usuario), checkUser.nombre,checkUser.rol, res);
+const token = generateToken(String(checkUser.id_usuario), checkUser.nombre,checkUser.rol, checkUser.intentos_examen_final, checkUser.intentos_examen_prueba, res);
     if (!token) {
         throw new Error('Error al generar el token');
     }

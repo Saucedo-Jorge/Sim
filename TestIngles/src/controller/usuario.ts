@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import { handleHttp } from "../utils/error.handle";
 import { RequestExt } from "../interface/requestExt.interface";
-import { getusuario, getusuarios, insertUsuario } from "../service/usuario";
+import { getusuario, getusuarios, insertUsuario, estuser, updateusuario, infouser } from "../service/usuario";
 import { userInfo } from "os";
 
 const getItem = async ({params}: Request, res: Response) => {
@@ -31,12 +31,22 @@ const getItems = async (req: Request, res: Response) => {
 
 };
 
+const estadisticas = async ({params}: Request, res: Response) => {
+    try {
+
+        const est = await estuser(parseInt(params.id,10));
+        res.send(est);
+    }
+    catch (e){
+        handleHttp(res, "ERROR_GET_ESTADISTICAS",e);
+
+    }
+}
+
 const getInfo = async (req: RequestExt, res: Response) => {
     try {
       
-        console.log("Info del usuario");
-        console.log("USER", req.user);
-        res.send({data : req.user});
+        res.send( req.user);
 
     }
     catch (e){
@@ -45,6 +55,22 @@ const getInfo = async (req: RequestExt, res: Response) => {
     }
 
 };
+
+
+const infosinfo = async ({params}: Request, res: Response) => {
+    try {
+      
+        const info = await infouser(parseInt(params.id,10));
+        res.send(info);
+
+    }
+    catch (e){
+        handleHttp(res, "ERROR_GET_INFO",e);
+
+    }
+
+};
+
 
 const postItem = ({body}: Request, res: Response) => {
     try {
@@ -59,9 +85,12 @@ const postItem = ({body}: Request, res: Response) => {
 
 };
 
-const updateItem = (req: Request, res: Response) => {
+const updateItem = async ({body, params}: Request, res: Response) => {
     try {
-
+        console.log("BODY", body);
+        console.log("PARAMS", params.id);
+        const est = await updateusuario(parseInt(params.id,10), body);
+        res.send(est);
     }
     catch (e){
         handleHttp(res, "ERROR_UPDATE_ITEM");
@@ -81,4 +110,4 @@ const deleteItem = (req: Request, res: Response) => {
 
 };
 
-export { getItem, getItems, postItem, updateItem, deleteItem, getInfo };
+export { getItem, getItems, postItem, updateItem, deleteItem, getInfo, estadisticas, infosinfo };

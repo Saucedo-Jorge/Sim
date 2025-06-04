@@ -45,14 +45,14 @@
     <div id="resultado"></div>
 
     <script>
+  
   let preguntas = [];
   let indice = 0;
   let timer;
   let tiempoRestante = 60;
   const respuestasUsuario = [];
-  let idExamen = null;
-  const idUsuario = 1; // <-- Cambia según tu lógica de sesión
-  const tipoExamen = 'prueba';
+  const idUsuario = localStorage.getItem("userId");
+  const tipoExamen = localStorage.getItem("tipo");
 
   async function iniciarExamen() {
     try {
@@ -60,7 +60,8 @@
       const res = await fetch('http://localhost:3001/examen/', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ id_usuario: idUsuario, tipo_examen: tipoExamen })
+        body: JSON.stringify({ id_usuario: idUsuario, tipo_examen: tipoExamen }),
+        credentials: 'include'
       });
       const data = await res.json();
       idExamen = data.id_examen;
@@ -74,7 +75,11 @@
 
   async function cargarPreguntas() {
     try {
-      const respuesta = await fetch('http://localhost:3001/pregunta/prueba');
+      const tipo = localStorage.getItem("tipo");
+      const respuesta = await fetch(`http://localhost:3001/pregunta/${tipo}`, {
+        method: 'GET',
+        credentials: 'include'
+      });
       if (!respuesta.ok) throw new Error('Error en la solicitud: ' + respuesta.status);
       preguntas = await respuesta.json();
       mostrarPregunta();
@@ -162,13 +167,15 @@
     await fetch(`http://localhost:3001/examenes/${idExamen}`, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ calificacion })
+      body: JSON.stringify({ calificacion }),
+        credentials: 'include'
     });
 
     // Insertar respuestas
     await fetch('http://localhost:3001/respuestas', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
       body: JSON.stringify({
         id_examen: idExamen,
         respuestas: respuestasUsuario
@@ -178,6 +185,8 @@
     document.getElementById('contenedor-pregunta').innerHTML = `<h2>Examen finalizado</h2>`;
     document.getElementById('cronometro').style.display = 'none';
     document.getElementById('resultado').textContent = `Calificación: ${calificacion}`;
+
+    window.location.href = "../html/principal.html";
   }
 
   // Inicia todo

@@ -8,7 +8,7 @@ const router = Router();
 
 router.get("/",checkJWT, getItems); 
 
-router.get("/prueba", getItemsp); 
+router.get("/prueba",checkJWT, getItemsp); 
 
 router.get("/final",checkJWT, getItemsf); 
 

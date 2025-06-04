@@ -1,89 +1,48 @@
 <!DOCTYPE html>
 <html lang="es">
-    <head>
-        <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>Panel Principal</title>
-        <script>
-            // Función para verificar si el usuario está autenticado
-            async function checkAuth() {
-                try {
-                    const response = await fetch('http://localhost:3001/usuario/info', { // Ajusta la URL de la API
-                        method: 'GET',
-                        credentials: 'include', // Asegura que se envíen las cookies
-                    });
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Panel Principal</title>
+    <link rel="stylesheet" href="../css/panel.css" />
+  </head>
+  <body>
+    <div class="container">
+      <h1 id="bienvenida" class="title">¡Bienvenido!</h1>
 
-                    if (!response.ok) {
-                        // Si el token no es válido o no se proporciona, redirige al login
-                        alert('Error al verificar la autenticación. Por favor, inicia sesión nuevamente.');
-                        window.location.href = '../html/login.html';
-                    } else {
-                        const data = await response.json();
-                        const userName = data.user.nombre;
-
-                        // Mostrar el mensaje de bienvenida con el nombre del usuario
-                        const bienvenidaElement = document.getElementById('bienvenida');
-                        bienvenidaElement.textContent = `¡Bienvenido, ${userName}!`;
-                    }
-                } catch (error) {
-                    console.error('Error al verificar la autenticación:', error);
-                    alert('Error al verificar la autenticación. Por favor, inicia sesión nuevamente.');
-                    window.location.href = '../html/login.html'; // En caso de cualquier error, redirige al login
-                }
-            }
-
-            window.onload = function() {
-                checkAuth(); // Llama a la función de autenticación al cargar la página
-            };
-        </script>
-
-        <!-- Estilos rápidos con Tailwind CDN -->
-        <script src="https://cdn.tailwindcss.com"></script>
-    </head>
-    <body class="bg-gray-100 text-gray-800 font-sans">
-        <div class="max-w-4xl mx-auto p-6">
-
-            <h1 class="text-3xl font-bold mb-6">Panel Principal</h1>
-            <p id="bienvenida"
-                class="text-lg mb-4 text-gray-700">¡Bienvenido</p>
-
-            <!-- Dashboards -->
-            <section class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-10">
-                <div class="bg-white p-4 rounded shadow">
-                    <h2 class="text-xl font-semibold mb-2">Preguntas más
-                        falladas</h2>
-                    <p>Ejemplo: Señales de tránsito, Alcoholímetro, Cruces
-                        ferroviarios...</p>
-                </div>
-                <div class="bg-white p-4 rounded shadow">
-                    <h2 class="text-xl font-semibold mb-2">Promedio de
-                        aciertos</h2>
-                    <p>Últimos 6 exámenes: 7.5/10</p>
-                </div>
-            </section>
-
-            <!-- Opciones de examen -->
-            <section class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div
-                    class="bg-white p-6 rounded shadow flex flex-col items-center">
-                    <h2 class="text-2xl font-semibold mb-2">Examen General</h2>
-                    <p class="mb-4">Intentos restantes: <span
-                            id="general-attempts"
-                            class="font-bold text-blue-600"></span></p>
-                    <button
-                        class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Iniciar</button>
-                </div>
-
-                <div
-                    class="bg-white p-6 rounded shadow flex flex-col items-center">
-                    <h2 class="text-2xl font-semibold mb-2">Examen Final</h2>
-                    <p class="mb-4">Intentos restantes: <span
-                            id="final-attempts"
-                            class="font-bold text-red-600"></span></p>
-                    <button
-                        class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600">Iniciar</button>
-                </div>
-            </section>
+      <section class="exam-section">
+        <div class="card general">
+          <h2>Examen Prueba</h2>
+          <p>Intentos restantes: <span id="general-attempts"></span></p>
+          <button id="btn-prueba">Iniciar</button>
         </div>
-    </body>
+        <div class="card final">
+          <h2>Examen Final</h2>
+          <p>Intentos restantes: <span id="final-attempts"></span></p>
+          <button id="btn-final">Iniciar</button>
+        </div>
+        <div class="dashboard-card">
+          <h3>Promedio de exámenes</h3>
+          <p>Últimos exámenes: <strong id="promedio-examenes"></strong></p>
+        </div>
+
+      </section>
+
+      <section class="dashboard">
+
+        <div class="dashboard-card">
+          <h3>Calificaciones de exámenes de prueba</h3>
+          <canvas id="lineChart" width="400" height="200"></canvas>
+        </div>
+
+        <div class="dashboard-card">
+          <h3>Porcentaje de aciertos</h3>
+          <canvas id="doughnutChart" width="400" height="200"></canvas>
+        </div>
+      </section>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="../js/panel.js"></script>
+  </body>
 </html>

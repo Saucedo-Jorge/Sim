@@ -11,7 +11,7 @@ loginForm.addEventListener("submit", async (e) => {
 
   console.log("Datos del formulario de login:", data);
   try {
-    const res = await fetch("localhost:3001/auth/login", {
+    const res = await fetch("http://localhost:3001/auth/login", {
       method: "POST",
       credentials: "include",
       headers: { "Content-Type": "application/json" },
@@ -21,6 +21,7 @@ loginForm.addEventListener("submit", async (e) => {
 
     if (res.ok) {
       // Si el login es exitoso, redirige a la vista protegida
+      alert("Login exitoso");
       window.location.href = "../html/principal.html"; // futuro archivo
     }
   } catch (err) {
