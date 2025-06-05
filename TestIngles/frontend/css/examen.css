@@ -1,0 +1,58 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f4f4f4;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+}
+
+#cronometro {
+  font-size: 1.8rem;
+  color: red;
+  margin-bottom: 1rem;
+}
+
+.pregunta {
+  width: 100%;
+  max-width: 1200px;
+  background: white;
+  padding: 2rem;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  text-align: left;
+  font-size: 1.25rem;
+  line-height: 1.6;
+}
+
+.opcion {
+  display: block;
+  margin: 0.75rem 0;
+  font-size: 1.1rem;
+}
+
+#resultado {
+  margin-top: 2rem;
+  font-weight: bold;
+  font-size: 1.4rem;
+  color: #333;
+}
+
+@media (max-width: 600px) {
+  .pregunta {
+    font-size: 1.1rem;
+    padding: 1.5rem;
+  }
+
+  #cronometro {
+    font-size: 1.5rem;
+  }
+}

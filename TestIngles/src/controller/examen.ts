@@ -42,7 +42,8 @@ const postItem = async({body}: Request, res: Response) => {
 
         const a = await insertExamen(body);
         console.log(body);
-        res.send( body );
+        res.send( a );
+        console.log("Examen creado correctamente:", a);
 
     }
     catch (e){
@@ -52,13 +53,15 @@ const postItem = async({body}: Request, res: Response) => {
 
 };
 
-const updateItem = ({body}: Request, res: Response) => {
+const updateItem = ({params, body}: Request, res: Response) => {
     try {
 
-        const id_examen = body.id_examen; 
+        const id_examen = params.id; 
 
        
-        const response = updateexamen(id_examen, body);
+        const response = updateexamen(parseInt(id_examen, 10), body);
+        console.log("PARAMS", params);
+        console.log("ID_PREGUNTA", id_examen);  
         res.send(response);
 
     }

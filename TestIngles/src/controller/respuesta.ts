@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import { handleHttp } from "../utils/error.handle";
 import { RequestExt } from "../interface/requestExt.interface";
-import { deleterespuesta, getrespuesta, getrespuestas, getrespuestasf, getrespuestasp, insertRespuesta, updaterespuesta } from "../service/respuesta";
+import { hist, deleterespuesta, getrespuesta, getrespuestas, getrespuestasf, getrespuestasp, insertRespuesta, updaterespuesta } from "../service/respuesta";
 
 const getItem = async ({params}: Request, res: Response) => {
     try {
@@ -10,6 +10,24 @@ const getItem = async ({params}: Request, res: Response) => {
         console.log("ID_PREGUNTA", id_respuesta);
 
         const responseUser = await getrespuesta(id_respuesta);
+        res.send(responseUser);
+
+    }
+    catch (e){
+
+        handleHttp(res, "ERROR_GET_ITEM");
+
+    }
+
+};
+
+const history = async ({params}: Request, res: Response) => {
+    try {
+        console.log("PARAMS", params);
+        const id_usuario = params.id; // Use params.id directly
+        console.log("ID_PREGUNTA", id_usuario);
+
+        const responseUser = await hist(id_usuario);
         res.send(responseUser);
 
     }
@@ -69,7 +87,9 @@ const getItemsf = async (req: RequestExt, res: Response) => {
 const postItem = async({body}: Request, res: Response) => {
     try {
 
-        const a = await insertRespuesta(body);
+        const {id_examen, respuestas} = body;
+
+        const a = await insertRespuesta(id_examen, respuestas);
         console.log(body);
         res.send( body );
 
@@ -112,4 +132,4 @@ const deleteItem = ({body}: Request, res: Response) => {
 
 };
 
-export { getItem, getItems, postItem, updateItem, deleteItem, getItemsp, getItemsf, };
+export { history, getItem, getItems, postItem, updateItem, deleteItem, getItemsp, getItemsf, };

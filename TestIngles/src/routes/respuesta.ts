@@ -1,5 +1,5 @@
 import { Request, Response, Router } from "express";
-import { deleteItem, getItem, getItems, getItemsf, getItemsp, postItem, updateItem } from "../controller/respuesta";
+import { history, deleteItem, getItem, getItems, getItemsf, getItemsp, postItem, updateItem } from "../controller/respuesta";
 import { checkJWT } from "../middleware/session";
 
 
@@ -10,6 +10,8 @@ router.get("/",checkJWT, getItems);
 router.get("/prueba",checkJWT, getItemsp); 
 
 router.get("/final",checkJWT, getItemsf); 
+
+router.get("/history/:id",checkJWT, history);
 
 router.get("/:id",checkJWT,  getItem);
 

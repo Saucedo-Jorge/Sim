@@ -2,20 +2,56 @@ import { RespuestaModel } from "../model/respuesta";
 import { Sequelize } from "sequelize";
 
 
-const insertRespuesta = async (item:RespuestaModel) => {
-    try {
-        const respuesta = await RespuestaModel.create({ ...item } as any);
-        return respuesta;
-    } catch (error) {
-        console.error("Error inserting respuesta:", error);
-        throw error; // Rethrow the error to be handled by the caller
+import { Request, Response } from "express";
+import { db } from "../config/database";
+
+const insertRespuesta = async (id_examen:number, respuestas : Partial<RespuestaModel>) => {
+ 
+
+  try {
+    // Verifica que haya respuestas
+    if (!respuestas || !Array.isArray(respuestas)) {
+        return { error: "No se proporcionaron respuestas válidas" };
     }
-}; 
+
+    // Inserta cada respuesta con su respectivo id_examen
+    for (const r of respuestas) {
+      await RespuestaModel.create({
+        id_examen,
+        id_pregunta: r.id_pregunta,
+        respuesta_usuario: r.respuesta_usuario,
+        es_correcta: r.es_correcta
+      });
+    }
+
+    return { message: "Respuestas guardadas correctamente" };
+  } catch (error) {
+    console.error("Error al guardar respuestas:", error);
+    return { error: "Error al guardar respuestas" };
+  }
+};
 
 const getrespuestas = async () => {
     try {
         const respuestas = await RespuestaModel.findAll();
         return respuestas;
+    } catch (error) {
+        console.error("Error fetching respuestas:", error);
+        throw error; // Rethrow the error to be handled by the caller
+    }
+}
+
+
+const hist = async (id :string) => {
+    try {
+        const [resultados, metadata] = await db.query(`
+        SELECT * from respuestas r inner join  examenes e 
+        on r.id_examen = e.id_examen where e.id_usuario= :id
+        `, {
+        replacements: { id }, // <- usa tu variable aquí
+        });
+
+        return resultados;
     } catch (error) {
         console.error("Error fetching respuestas:", error);
         throw error; // Rethrow the error to be handled by the caller
@@ -94,4 +130,4 @@ const deleterespuesta = async (id_respuesta: number) => {
     }
 };
 
-export {insertRespuesta ,getrespuestas, getrespuesta, updaterespuesta, deleterespuesta, getrespuestasp, getrespuestasf};
+export {hist, insertRespuesta ,getrespuestas, getrespuesta, updaterespuesta, deleterespuesta, getrespuestasp, getrespuestasf};

@@ -24,8 +24,8 @@ const estuser = async (id:number) => {
                         id_usuario: id,
                         tipo_examen: 'prueba'
                     },
-                    order: [['fecha_inicio', 'DESC']],
-                    limit: 6
+                    order: [['fecha_inicio', 'ASC']],
+                    limit: 5
         });
 
         const [resultados, metadata] = await db.query(`

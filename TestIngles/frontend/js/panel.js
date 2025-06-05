@@ -32,12 +32,33 @@ async function usersin() {
     return;
   } else {
     const data = await response.json();
+
+    const intentosPrueba = parseInt(data.intentos_examen_prueba);
+    const intentosFinal = parseInt(data.intentos_examen_final);
+
     localStorage.setItem("intp", data.intentos_examen_prueba);
     localStorage.setItem("intf", data.intentos_examen_final);
     document.getElementById("general-attempts").textContent =
       data.intentos_examen_prueba;
     document.getElementById("final-attempts").textContent =
       data.intentos_examen_final;
+
+    const btnPrueba = document.getElementById("btn-prueba");
+    const btnFinal = document.getElementById("btn-final");
+
+    if (intentosPrueba <= 0) {
+      btnPrueba.disabled = true;
+      btnPrueba.textContent = "Sin intentos de prueba";
+      btnPrueba.style.opacity = "0.6";
+      btnPrueba.style.cursor = "not-allowed";
+    }
+
+    if (intentosFinal <= 0) {
+      btnFinal.disabled = true;
+      btnFinal.textContent = "Sin intentos finales";
+      btnFinal.style.opacity = "0.6";
+      btnFinal.style.cursor = "not-allowed";
+    }
   }
 }
 
@@ -57,7 +78,10 @@ async function estadist() {
   }
 
   const data = await response.json();
-  const calificaciones = data.examenes.map((e) => parseFloat(e.calificacion));
+  const calificaciones = data.examenes
+    .map((e) => parseFloat(e.calificacion))
+    .filter((val) => !isNaN(val));
+
   const promedio =
     calificaciones.reduce((acc, val) => acc + val, 0) / calificaciones.length ||
     0;
@@ -156,8 +180,13 @@ document.getElementById("btn-final").addEventListener("click", function () {
       return;
     }
   }
+
   intentos_prueba();
   window.location.href = "../html/examen.html";
+});
+
+document.getElementById("btn-history").addEventListener("click", function () {
+  window.location.href = "../html/history.html";
 });
 
 window.onload = () => {

@@ -5,6 +5,7 @@ import { Sequelize } from "sequelize";
 const insertExamen = async (item:ExamenModel) => {
     try {
         const examen = await ExamenModel.create({ ...item } as any);
+        console.log("Examen creado correctamente serv:", examen);
         return examen;
     } catch (error) {
         console.error("Error inserting examen:", error);
@@ -63,15 +64,16 @@ const getexamen = async (id_examen: string) => {
     }
 }
 
-const updateexamen = async (id_examen: string, nuevosDatos: Partial<ExamenModel>) => {
+const updateexamen = async (id_examen: number, nuevosDatos: Partial<ExamenModel>) => {
     try {
         const examen = await ExamenModel.findByPk(id_examen);
         if (!examen) {
             throw new Error("Examen no encontrado");
         }
 
-        await examen.update(nuevosDatos);
-        return examen;
+      await ExamenModel.update(nuevosDatos, {
+            where: { id_examen}
+        });
     } catch (error) {
         console.error("Error updating examen:", error);
         throw error;
